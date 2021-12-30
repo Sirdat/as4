@@ -1,0 +1,45 @@
+USE MASTER
+GO
+
+IF EXISTS (SELECT * FROM sys.databases WHERE NAME = 'Sales')
+DROP DATABASE Sales
+GO
+
+CREATE DATABASE Sales
+GO
+
+USE Sales
+GO
+
+CREATE TABLE Customer(
+	CustID INT PRIMARY KEY IDENTITY(1,1),
+	CustName NVARCHAR(20) NOT NULL,
+	CustAddress NVARCHAR(20) NOT NULL,
+	CustState NVARCHAR(10) NOT NULL,
+	CustPostcode INT NOT NULL,
+)
+GO
+CREATE TABLE Invoice(
+	InvoiceNo INT PRIMARY KEY IDENTITY(1,1),
+	InvDate DATETIME NOT NULL,
+	CustID INT NOT NULL,
+	CONSTRAINT FK_Invoice_Customer FOREIGN KEY(CustID) REFERENCES Customer(CustID)
+)
+GO
+CREATE TABLE Item(
+	ItemNo INT PRIMARY KEY IDENTITY(1,1),
+	ItemDesc NVARCHAR(20),
+	ItemPrice FLOAT NOT NULL,
+	)
+GO
+CREATE TABLE InvoiceItem(
+	InvoiceNo INT,
+	ItemNo INT,
+	PRIMARY KEY(InvoiceNo,ItemNo),
+	CONSTRAINT FK_InvoiceItem_Invoice FOREIGN KEY(InvoiceNo) REFERENCES Invoice(InvoiceNo),
+	CONSTRAINT FK_InvoiceItem_Item FOREIGN KEY(ItemNo) REFERENCES Item(ItemNo)
+)
+GO
+
+
+
